@@ -12,7 +12,7 @@ export function SocketProvider({id, children}) {
   
   useEffect(() => {
     const currentUser = JSON.parse(sessionStorage.getItem('user'))
-    const newSocket = io('ws://localhost:8900',
+    const newSocket = io(process.env.VITE_SOCKET_URL,
      {
        auth: {
         sessionID: currentUser.token,
