@@ -3,7 +3,9 @@ import axios from "axios";
 export const login = async (credentials, navigate) => {
   try {
     const { data } = await axios.post(`users/login`, credentials);
+    console.log(data)
     sessionStorage.setItem("user", JSON.stringify(data));
+    console.log(sessionStorage)
     navigate("/");
     return data;
   } catch (error) {
