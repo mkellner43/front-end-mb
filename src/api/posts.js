@@ -1,8 +1,9 @@
 import axios from "axios";
+import { instance } from "./axios";
 
 export const getPosts = async (pageParam) => {
   try {
-    const { data } = await axios.get(`posts?page=${pageParam}`);
+    const { data } = await instance.get(`posts?page=${pageParam}`);
     return data;
   } catch (error) {
     return error;
@@ -11,7 +12,7 @@ export const getPosts = async (pageParam) => {
 
 export const sendPost = async (object) => {
   try {
-    const { data } = await axios.post(`posts`, object);
+    const { data } = await instance.post(`posts`, object);
     return data;
   } catch (error) {
     return error;
@@ -20,7 +21,7 @@ export const sendPost = async (object) => {
 
 export const deletePost = async (id) => {
   try {
-    const { data } = await axios.delete(`posts/${id}`);
+    const { data } = await instance.delete(`posts/${id}`);
     return data;
   } catch (error) {
     return error;
@@ -29,7 +30,7 @@ export const deletePost = async (id) => {
 
 export const postLike = async ({ object }) => {
   try {
-    const { data } = await axios.post(`posts/like/${object._id}`);
+    const { data } = await instance.post(`posts/like/${object._id}`);
     return data;
   } catch (error) {
     return error;
@@ -38,7 +39,7 @@ export const postLike = async ({ object }) => {
 
 export const postComment = async ({ object, comment }) => {
   try {
-    const { data } = await axios.post(`comments/${object._id}`, {
+    const { data } = await instance.post(`comments/${object._id}`, {
       comment_body: comment,
     });
     return data;
@@ -49,7 +50,7 @@ export const postComment = async ({ object, comment }) => {
 
 export const getPostComments = async (id, limit = 10, skip = 0) => {
   try {
-    const { data } = await axios.get(
+    const { data } = await instance.get(
       `comments/${id}/?limit=${limit}&skip=${skip}`
     );
     return data;

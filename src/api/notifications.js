@@ -1,9 +1,10 @@
 import axios from "axios";
+import { instance } from "./axios";
 
 export const readAllNotifications = async (notifications = []) => {
   if (notifications.length === 0) return;
   try {
-    const { data } = await axios.post(`users/notifications/read`, {
+    const { data } = await instance.post(`users/notifications/read`, {
       notifications,
     });
     return data;
@@ -15,7 +16,7 @@ export const readAllNotifications = async (notifications = []) => {
 export const unreadAllNotifications = async (notifications = []) => {
   if (notifications.length === 0) return;
   try {
-    const { data } = await axios.post(`users/notifications/unread`, {
+    const { data } = await instance.post(`users/notifications/unread`, {
       notifications,
     });
     return data;
@@ -26,7 +27,7 @@ export const unreadAllNotifications = async (notifications = []) => {
 
 export const readOne = async (id) => {
   try {
-    const { data } = await axios.post(`users/notifications/read/${id}`);
+    const { data } = await instance.post(`users/notifications/read/${id}`);
     return data;
   } catch (error) {
     return error;
@@ -35,7 +36,7 @@ export const readOne = async (id) => {
 
 export const getNotifications = async (cursor) => {
   try {
-    const { data } = await axios.get(
+    const { data } = await instance.get(
       `users/notifications?skip=${cursor}&limit=6`
     );
     return data;
@@ -46,7 +47,7 @@ export const getNotifications = async (cursor) => {
 
 export const deleteNotification = async (id) => {
   try {
-    const { data } = await axios.delete(`users/notifications/${id}`);
+    const { data } = await instance.delete(`users/notifications/${id}`);
     return data;
   } catch (error) {
     throw error;
