@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState, createContext } from 'react';
 import { io } from 'socket.io-client';
-
 const SocketContext = createContext()
 
 export function useSocket() {
@@ -12,7 +11,7 @@ export function SocketProvider({id, children}) {
   
   useEffect(() => {
     const currentUser = JSON.parse(sessionStorage.getItem('user'))
-    const newSocket = io(process.env.VITE_SOCKET_URL,
+    const newSocket = io(import.meta.env.VITE_SOCKET_URL,
      {
        auth: {
         sessionID: currentUser.token,

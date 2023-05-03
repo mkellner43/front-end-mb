@@ -3,23 +3,19 @@ import axios from "axios";
 export const login = async (credentials, navigate) => {
   try {
     const { data } = await axios.post(`users/login`, credentials);
-    console.log(data)
     sessionStorage.setItem("user", JSON.stringify(data))
-    //only for render deploy -- cannot set cookies without custom domain
-    const date = new Date()
-    let time = date.getTime()
-    let expireTime = time + 3600 * 24
-    date.setTime(expireTime)
-    document.cookie = `access-token=${data.token}; expires${date.toUTCString()}`
-    console.log(document.cookie)
+    axios.defaults.headers.common["Authorization"] =  data.token
+    console.log(axios.defaults.headers.common["Authorization"])
     navigate("/");
     return data;
   } catch (error) {
-    if (error.response.status === 401)
+    if (error.response?.status === 401)
       return Promise.reject("Invalid username or password.");
     return Promise.reject(error.message);
   }
 };
+
+// figure out how to get token from front end to back end --- cant use cookies maybe session store? have to figure out how to use with axios
 
 export const createUser = async (user) => {
   try {
