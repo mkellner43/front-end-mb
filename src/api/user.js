@@ -4,7 +4,7 @@ export const login = async (credentials) => {
   try {
     const { data } = await axios.post(`users/login`, credentials);
     sessionStorage.setItem("user", JSON.stringify(data))
-    axios.defaults.headers.Authorization =  data.token
+    axios.defaults.headers.common.Authorization = data.token
     return data;
   } catch (error) {
     if (error.response?.status === 401)
