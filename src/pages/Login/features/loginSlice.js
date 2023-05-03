@@ -8,7 +8,7 @@ export const loginSlice = createSlice({
     usernameError: null,
     passwordError: null,
     mainError: null,
-    token: document.cookie.split("=")[1],
+    token: JSON.parse(sessionStorage.getItem("user"))?.token,
     currentUser: JSON.parse(sessionStorage.getItem("user")),
   },
   reducers: {
