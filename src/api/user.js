@@ -1,8 +1,9 @@
 import axios from "axios";
+import { instance } from "./axios";
 
 export const login = async (credentials) => {
   try {
-    const { data } = await axios.post(`users/login`, credentials);
+    const { data } = await instance.post(`users/login`, credentials);
     sessionStorage.setItem("user", JSON.stringify(data))
     return data;
   } catch (error) {
@@ -12,11 +13,10 @@ export const login = async (credentials) => {
   }
 };
 
-// figure out how to get token from front end to back end --- cant use cookies maybe session store? have to figure out how to use with axios
 
 export const createUser = async (user) => {
   try {
-    const { data } = await axios.post(`users/registration`, user);
+    const { data } = await instance.post(`users/registration`, user);
     return data;
   } catch (error) {
     return error;
@@ -25,7 +25,7 @@ export const createUser = async (user) => {
 
 export const profile = async (id, pageParam) => {
   try {
-    const { data } = await axios.get(`posts/profile/${id}?page=${pageParam}`);
+    const { data } = await instance.get(`posts/profile/${id}?page=${pageParam}`);
     return data;
   } catch (error) {
     return error;
@@ -34,7 +34,7 @@ export const profile = async (id, pageParam) => {
 
 export const updateAvatar = async (avatar) => {
   try {
-    const { data } = await axios.put(`users/avatar`, { avatar });
+    const { data } = await instance.put(`users/avatar`, { avatar });
     return data;
   } catch (error) {
     return error;

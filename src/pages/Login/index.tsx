@@ -29,7 +29,8 @@ interface State {
 }
 
 interface submitCredentials {
-  credentials: string;
+  username: string,
+  password: string
 }
 
 const Login = () => {
@@ -47,7 +48,7 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const submitLogin = useMutation({
-    mutationFn: ({ credentials }: submitCredentials) =>
+    mutationFn: (credentials : submitCredentials) =>
       login(credentials),
     onSuccess: (data) => {
       dispatch(setCurrentUser(data));
@@ -83,11 +84,11 @@ const Login = () => {
       ? dispatch(setPasswordError("Password is required"))
       : dispatch(setPasswordError(null));
     if (username && password) {
-      const credentials: string = JSON.stringify({
+      const credentials = {
         username: username,
         password: password,
-      });
-      submitLogin.mutate({ credentials });
+      }
+      submitLogin.mutate(credentials);
     }
   };
   return (
