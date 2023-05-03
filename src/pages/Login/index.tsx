@@ -51,7 +51,6 @@ const Login = () => {
     mutationFn: ({ credentials, navigate }: submitCredentials) =>
       login(credentials, navigate),
     onSuccess: (data) => {
-      console.log("success??");
       dispatch(setCurrentUser(data));
       dispatch(setToken(data.token));
       dispatch(updateUsername(""));

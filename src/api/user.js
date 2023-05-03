@@ -4,8 +4,14 @@ export const login = async (credentials, navigate) => {
   try {
     const { data } = await axios.post(`users/login`, credentials);
     console.log(data)
-    sessionStorage.setItem("user", JSON.stringify(data));
-    console.log(sessionStorage)
+    sessionStorage.setItem("user", JSON.stringify(data))
+    //only for render deploy -- cannot set cookies without custom domain
+    const date = new Date()
+    let time = date.getTime()
+    let expireTime = time + 3600 * 24
+    date.setTime(expireTime)
+    document.cookie = `access-token=${data.token}; expires${date.toUTCString()}`
+    console.log(document.cookie)
     navigate("/");
     return data;
   } catch (error) {
