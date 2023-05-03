@@ -4,8 +4,8 @@ export const login = async (credentials, navigate) => {
   try {
     const { data } = await axios.post(`users/login`, credentials);
     sessionStorage.setItem("user", JSON.stringify(data))
-    axios.defaults.headers.common["Authorization"] =  data.token
-    console.log(axios.defaults.headers.common["Authorization"])
+    axios.defaults.headers.Authorization =  data.token
+    console.log(axios.defaults.headers.Authorization)
     navigate("/");
     return data;
   } catch (error) {
