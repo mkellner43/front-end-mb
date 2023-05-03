@@ -1,12 +1,10 @@
 import axios from "axios";
 
-export const login = async (credentials, navigate) => {
+export const login = async (credentials) => {
   try {
     const { data } = await axios.post(`users/login`, credentials);
     sessionStorage.setItem("user", JSON.stringify(data))
     axios.defaults.headers.Authorization =  data.token
-    console.log(axios.defaults.headers.Authorization)
-    navigate("/");
     return data;
   } catch (error) {
     if (error.response?.status === 401)
