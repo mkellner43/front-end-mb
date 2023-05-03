@@ -30,7 +30,6 @@ interface State {
 
 interface submitCredentials {
   credentials: string;
-  navigate: any;
 }
 
 const Login = () => {
@@ -48,8 +47,8 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const submitLogin = useMutation({
-    mutationFn: ({ credentials, navigate }: submitCredentials) =>
-      login(credentials, navigate),
+    mutationFn: ({ credentials }: submitCredentials) =>
+      login(credentials),
     onSuccess: (data) => {
       dispatch(setCurrentUser(data));
       dispatch(setToken(data.token));
@@ -61,6 +60,9 @@ const Login = () => {
       dispatch(setMainError(null));
     },
     retry: false,
+    onSettled: () => {
+      navigate("/")
+    },
     onError: (err) => {
       dispatch(setMainError(err));
     },
@@ -85,7 +87,7 @@ const Login = () => {
         username: username,
         password: password,
       });
-      submitLogin.mutate({ credentials, navigate });
+      submitLogin.mutate({ credentials });
     }
   };
   return (

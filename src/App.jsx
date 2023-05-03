@@ -16,7 +16,7 @@ import { ErrorBoundary } from "react-error-boundary";
 
 const App = () => {
   const currentUser = useSelector((state) => state.login.currentUser);
-  const token = useSelector((state) => state.login.token);
+  const token = useSelector((state) => state.login.token) || JSON.parse(sessionStorage.getItem('user'))?.token;
   const theme = useSelector((state) => state.nav.theme);
   const darkTheme = createTheme({
     palette: {
