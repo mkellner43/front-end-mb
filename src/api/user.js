@@ -1,10 +1,12 @@
 import axios from "axios";
+const instance = axios.create()
 
 export const login = async (credentials) => {
   try {
     const { data } = await axios.post(`users/login`, credentials);
     sessionStorage.setItem("user", JSON.stringify(data))
-    axios.defaults.headers.common.Authorization = data.token
+    instance.defaults.headers.common.Authorization = data.token
+    console.log(axios.defaults.headers)
     return data;
   } catch (error) {
     if (error.response?.status === 401)
