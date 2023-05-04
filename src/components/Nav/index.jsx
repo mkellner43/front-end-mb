@@ -209,8 +209,10 @@ export const Nav = ({ currentUser }) => {
                 width: 1,
                 p: 2,
               }}
-              onClick={() =>
+              onClick={() =>{
                 redirectToProfile({ id: currentUser.id, user: currentUser })
+                handleDrawerClose()
+              }
               }
             >
               <AvatarWithStatus
@@ -228,7 +230,11 @@ export const Nav = ({ currentUser }) => {
         <Divider />
         <List>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => navigate("/")}>
+            <ListItemButton onClick={() => {
+                navigate("/")
+                handleDrawerClose()
+              }
+            }>
               <ListItemIcon>
                 <Feed />
               </ListItemIcon>
@@ -236,7 +242,11 @@ export const Nav = ({ currentUser }) => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => navigate("/messages")}>
+            <ListItemButton onClick={() => {
+                navigate("/messages")
+                handleDrawerClose()
+              }
+            }>
               <ListItemIcon>
                 <Message />
               </ListItemIcon>
@@ -244,7 +254,11 @@ export const Nav = ({ currentUser }) => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => navigate("/friends")}>
+            <ListItemButton onClick={() => {
+                navigate("/friends")
+                handleDrawerClose()
+              }
+            }>
               <ListItemIcon>
                 <PeopleAlt />
               </ListItemIcon>
@@ -255,6 +269,7 @@ export const Nav = ({ currentUser }) => {
             <ListItemButton
               onClick={() => {
                 navigate("/notifications");
+                handleDrawerClose()
               }}
             >
               <ListItemIcon>
