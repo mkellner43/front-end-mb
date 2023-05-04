@@ -84,7 +84,6 @@ const Post = () => {
       queryClient.invalidateQueries(["profile", currentUser.id]);
     },
     onError: (err, variables, context) => {
-      console.log(err, variables, context);
       queryClient.setQueryData(["posts"], context.oldPosts);
       queryClient.setQueryData(["profile", currentUser.id], context.oldProfile);
       dispatch(setMainError(err.message));

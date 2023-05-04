@@ -70,19 +70,6 @@ const MessageSection = () => {
   }, [socket, queryClient, dispatch]);
 
   const handleScroll = () => {
-    console.log("height", scrollPosition.current.scrollHeight);
-    console.log("client", scrollPosition.current.clientHeight);
-    console.log("top", scrollPosition.current.scrollTop);
-    console.log(
-      "answer?",
-      scrollPosition.current.scrollHeight - scrollPosition.current.scrollTop <=
-        scrollPosition.current.clientHeight +
-          scrollPosition.current.clientHeight * 0.1 ||
-        scrollPosition.current.scrollHeight -
-          scrollPosition.current.scrollTop <=
-          scrollPosition.current.clientHeight -
-            scrollPosition.current.clientHeight * 0.1
-    );
     if (
       scrollPosition.current.scrollHeight !==
         scrollPosition.current.clientHeight &&

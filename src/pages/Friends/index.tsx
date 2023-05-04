@@ -263,7 +263,6 @@ const Friends = ({ currentUser }) => {
       return { prevPending, prevSuggestions };
     },
     onSuccess: (data, variables, context) => {
-      console.log(data, variables, context);
       socket?.emit("notification", {
         to_id: variables._id,
         type: "Friend Request",

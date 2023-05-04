@@ -51,7 +51,6 @@ const Chats = () => {
       </Button>
     );
   });
-  console.log(searchResults);
   const pickFromSearch = searchResults?.map((result) => (
     <Button
       sx={{ display: "flex", justifyContent: "flex-start" }}
@@ -66,7 +65,6 @@ const Chats = () => {
     >
       <AvatarWithStatus user={result.user} />
       <Typography ml={1}>
-        {console.log(result)}
         {result.user.username}
       </Typography>
     </Button>

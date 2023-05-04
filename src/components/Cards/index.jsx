@@ -139,7 +139,6 @@ const Cards = ({ post, date, user, object, currentUser }) => {
       );
     },
     onSettled: (data) => {
-      console.log(data);
       queryClient.invalidateQueries([`post: ${data._id}`, `comments`]);
     },
   });

@@ -21,7 +21,6 @@ const NewAvatar = () => {
   const updateAvatarQuery = useMutation({
     mutationFn: ({ selectedImage }) => updateAvatar(selectedImage),
     onSuccess: (data) => {
-      console.log(data);
       sessionStorage.setItem("user", JSON.stringify(data));
       queryClient.invalidateQueries(["profile"]);
       dispatch(setCurrentUser(data));
