@@ -209,11 +209,10 @@ export const Nav = ({ currentUser }) => {
                 width: 1,
                 p: 2,
               }}
-              onClick={() =>{
-                redirectToProfile({ id: currentUser.id, user: currentUser })
-                handleDrawerClose()
-              }
-              }
+              onClick={() => {
+                redirectToProfile({ id: currentUser.id, user: currentUser });
+                handleDrawerClose();
+              }}
             >
               <AvatarWithStatus
                 user={currentUser}
@@ -230,11 +229,12 @@ export const Nav = ({ currentUser }) => {
         <Divider />
         <List>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => {
-                navigate("/")
-                handleDrawerClose()
-              }
-            }>
+            <ListItemButton
+              onClick={() => {
+                navigate("/");
+                handleDrawerClose();
+              }}
+            >
               <ListItemIcon>
                 <Feed />
               </ListItemIcon>
@@ -242,11 +242,12 @@ export const Nav = ({ currentUser }) => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => {
-                navigate("/messages")
-                handleDrawerClose()
-              }
-            }>
+            <ListItemButton
+              onClick={() => {
+                navigate("/messages");
+                handleDrawerClose();
+              }}
+            >
               <ListItemIcon>
                 <Message />
               </ListItemIcon>
@@ -254,11 +255,12 @@ export const Nav = ({ currentUser }) => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => {
-                navigate("/friends")
-                handleDrawerClose()
-              }
-            }>
+            <ListItemButton
+              onClick={() => {
+                navigate("/friends");
+                handleDrawerClose();
+              }}
+            >
               <ListItemIcon>
                 <PeopleAlt />
               </ListItemIcon>
@@ -269,7 +271,7 @@ export const Nav = ({ currentUser }) => {
             <ListItemButton
               onClick={() => {
                 navigate("/notifications");
-                handleDrawerClose()
+                handleDrawerClose();
               }}
             >
               <ListItemIcon>
