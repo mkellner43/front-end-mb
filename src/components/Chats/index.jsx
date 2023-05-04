@@ -96,5 +96,3 @@ const Chats = () => {
 
 export default Chats;
 
-/// need to get messages to show up, was able to get new threads created and showing up
-/// work on infinite query and updating backend to make sense logistically
