@@ -175,9 +175,8 @@ const Cards = ({ post, date, user, object, currentUser }) => {
                             likes: [
                               ...post.likes,
                               {
-                                _id: Math.random(),
-                                user: currentUser,
-                                post_id: variables.object._id,
+                                _id: currentUser.id,
+                                username: currentUser,
                               },
                             ],
                           }
@@ -185,9 +184,8 @@ const Cards = ({ post, date, user, object, currentUser }) => {
                             ...post,
                             likes: [
                               {
-                                _id: Math.random(),
-                                user: currentUser,
-                                post_id: variables.object._id,
+                                _id: currentUser.id,
+                                username: currentUser,
                               },
                             ],
                           };
@@ -196,6 +194,7 @@ const Cards = ({ post, date, user, object, currentUser }) => {
                 };
           } else return page;
         });
+        setLikes((prevState) => !prevState);
         return {
           ...old,
           pages: newPages,
@@ -203,6 +202,14 @@ const Cards = ({ post, date, user, object, currentUser }) => {
       });
       if (location.pathname.includes("profile") && urlParams.id) {
         queryClient.setQueryData([`profile`, `${urlParams.id}`], (old) => {
+          if (likes) {
+            object.likes.filter((like) => like._id !== currentUser.id);
+          } else {
+            object.likes.push({
+              _id: currentUser.id,
+              username: currentUser.username,
+            });
+          }
           const newPages = old.pages.map((page) => {
             if (page.posts.includes(variables.object)) {
               return likes
@@ -229,9 +236,8 @@ const Cards = ({ post, date, user, object, currentUser }) => {
                               likes: [
                                 ...post.likes,
                                 {
-                                  _id: Math.random(),
-                                  user: currentUser,
-                                  post_id: variables.object._id,
+                                  _id: currentUser.id,
+                                  username: currentUser,
                                 },
                               ],
                             }
@@ -239,9 +245,8 @@ const Cards = ({ post, date, user, object, currentUser }) => {
                               ...post,
                               likes: [
                                 {
-                                  _id: Math.random(),
-                                  user: currentUser,
-                                  post_id: variables.object._id,
+                                  _id: currentUser.id,
+                                  username: currentUser,
                                 },
                               ],
                             };
@@ -250,6 +255,7 @@ const Cards = ({ post, date, user, object, currentUser }) => {
                   };
             } else return page;
           });
+          setLikes((prevState) => !prevState);
           return {
             ...old,
             pages: newPages,
@@ -277,7 +283,6 @@ const Cards = ({ post, date, user, object, currentUser }) => {
   });
 
   const handleLike = () => {
-    setLikes((prevState) => !prevState);
     addLike.mutate({ object });
   };
 
