@@ -1,4 +1,5 @@
 import { Typography, TextField, Button, Snackbar, Alert } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
 import { useNavigate } from "react-router-dom";
 import { login } from "../../api/user";
 import { useMutation } from "@tanstack/react-query";
@@ -34,6 +35,7 @@ interface submitCredentials {
 }
 
 const Login = () => {
+  // need to fix login loading indication and disable button when authing
   const navigate = useNavigate();
   const username = useSelector((state: State) => state.login.username);
   const password = useSelector((state: State) => state.login.password);
@@ -68,6 +70,8 @@ const Login = () => {
       dispatch(setMainError(err));
     },
   });
+
+  console.log(submitLogin.isLoading)
 
   const handleClose = () => {
     dispatch(setMainError(null));
@@ -155,6 +159,7 @@ const Login = () => {
           variant="contained"
           fullWidth
           sx={{ m: 1 }}
+          disabled={submitLogin.isLoading}
         >
           Sign In
         </Button>
@@ -165,11 +170,15 @@ const Login = () => {
           variant="outlined"
           type="button"
           onClick={() => navigate("/signup")}
+          disabled={submitLogin.isLoading}
           sx={{ m: 1 }}
         >
           Sign up
         </Button>
       </div>
+        {submitLogin.isLoading && <div className="absolute flex center">
+          <CircularProgress color="primary"/>
+          </div>}
     </form>
   );
 };
