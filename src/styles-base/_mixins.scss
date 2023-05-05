@@ -13,7 +13,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 400px;
+  width: 80%;
+  max-width: 400px;
   border: 2px solid rgba(64, 64, 64, 0.84);
   background-color: inherit;
   background-color: var(--background);
