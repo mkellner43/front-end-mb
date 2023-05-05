@@ -29,11 +29,13 @@ const App = () => {
     root.style.setProperty("--color", "rgba(0, 0, 0, 0.12)");
     root.style.setProperty("--background", "#fff");
     root.style.setProperty("--modal-text", "#121212");
+    root.style.setProperty("--border-color", "rgba(0, 0, 0, 0.23)")
   } else {
     let root = document.querySelector(":root");
     root.style.setProperty("--color", "#dee4e7");
     root.style.setProperty("--background", "#121212");
     root.style.setProperty("--modal-text", "#fff");
+    root.style.setProperty("--border-color", "rgba(255, 255, 255, 0.23)")
   }
 
   if (!token || currentUser?.token !== token)

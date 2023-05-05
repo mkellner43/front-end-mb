@@ -2,9 +2,10 @@
   --color: #fff;
   --background: #121212;
   --modal-text: #121212;
+  --border-color: rgba(0, 0, 0, 0.23)
 };
 
-$border-color-default: var(--color);
+$border-color-default: var(--border-color);
 $border-color-blue: rgba(25, 118, 210, 0.5);
 $default-border: 1px solid $border-color-default;
 $dark-color: #121212;
