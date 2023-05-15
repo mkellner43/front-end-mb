@@ -52,12 +52,12 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validation()) {
-      const data = JSON.stringify({
+      const data = {
         username: username,
         password: password,
         first_name: firstName,
         last_name: lastName,
-      });
+      };
       submitNewUser.mutate({ data });
     }
   };

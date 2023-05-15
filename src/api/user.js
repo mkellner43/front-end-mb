@@ -16,10 +16,11 @@ export const login = async (credentials) => {
 
 export const createUser = async (user) => {
   try {
+    console.log(user)
     const { data } = await instance.post(`users/registration`, user);
     return data;
   } catch (error) {
-    return error;
+    return Promise.reject(error.message)
   }
 };
 

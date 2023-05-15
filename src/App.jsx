@@ -88,12 +88,8 @@ export default App;
 
 // learn how to store files on web server through URLs although s3 is probably a better solution
 
-// prod is a pain in my dick
-// get docker working for prod
-// get working in prod env -- then get working in AWS or another free service? Maybe GCP?
-
 // add fake data and filter what user can see by friends and set defaults
 
 // add search bar to search posts / people based on filter
 
-// just reseeded data - ensure everything still is in working order if so, read note 1 time to learn so more (: <3 I know you are tired, but lets do it!
+// fix mobile auth issue, update chat page style for mobile - get creative
