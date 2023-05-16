@@ -53,7 +53,7 @@ const Chats = () => {
   });
   const pickFromSearch = searchResults?.map((result) => (
     <Button
-      sx={{ display: "flex", justifyContent: "flex-start" }}
+      className="flex !justify-start"
       variant="outlined"
       key={result.user._id}
       fullWidth
@@ -74,6 +74,7 @@ const Chats = () => {
     <div className="chats-section">
       <h1>Chats</h1>
       <TextField
+        className="!mb-2"
         label="Search Friends"
         variant="filled"
         size="small"
