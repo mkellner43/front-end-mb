@@ -16,7 +16,6 @@ export const login = async (credentials) => {
 
 export const createUser = async (user) => {
   try {
-    console.log(user)
     const { data } = await instance.post(`users/registration`, user);
     return data;
   } catch (error) {
@@ -35,7 +34,7 @@ export const profile = async (id, pageParam) => {
 
 export const updateAvatar = async (avatar) => {
   try {
-    const { data } = await instance.put(`users/avatar`, { avatar });
+    const { data } = await instance.put(`users/avatar`, {avatar});
     return data;
   } catch (error) {
     return error;

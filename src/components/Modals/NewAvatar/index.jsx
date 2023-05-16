@@ -19,12 +19,16 @@ const NewAvatar = () => {
   const queryClient = useQueryClient();
 
   const updateAvatarQuery = useMutation({
-    mutationFn: ({ selectedImage }) => updateAvatar(selectedImage),
+    mutationFn: (selectedImage) => updateAvatar(selectedImage),
     onSuccess: (data) => {
-      sessionStorage.setItem("user", JSON.stringify(data));
-      queryClient.invalidateQueries(["profile"]);
-      dispatch(setCurrentUser(data));
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      user.avatar = data.avatar
+      sessionStorage.setItem('user', JSON.stringify(user))
+      dispatch(setCurrentUser(user));
     },
+    onSettled: () => {
+      queryClient.invalidateQueries(["profile"]);
+    }
     // onError: () => dispatch(setToken())
   });
 
@@ -42,7 +46,7 @@ const NewAvatar = () => {
   };
 
   const handleSave = () => {
-    updateAvatarQuery.mutate({ selectedImage });
+    updateAvatarQuery.mutate(selectedImage);
     handleClose();
   };
 
