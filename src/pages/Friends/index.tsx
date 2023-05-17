@@ -425,7 +425,10 @@ const Friends = ({ currentUser }) => {
             <Tab label="Suggestions" />
           </Tabs>
         </div>
-        {value === 0 && (
+        {value === 0 && friendQuery.isLoading && (
+          <FriendPlaceholder friendPage={true} />
+          )} 
+        {value === 0 && !friendQuery.isLoading && (
           <div className="friend-section">
             <div
               className="scroll"
@@ -439,7 +442,11 @@ const Friends = ({ currentUser }) => {
             </div>
           </div>
         )}
-        {value === 1 && (
+        {value === 1 && pendingQuery.isLoading && (
+          <FriendPlaceholder friendPage={true} />
+          )
+        } 
+        {value === 1 && !pendingQuery.isLoading && (
           <div className="friend-section">
             <div
               className="scroll"
@@ -454,7 +461,10 @@ const Friends = ({ currentUser }) => {
             </div>
           </div>
         )}
-        {value === 2 && (
+        {value === 2 && suggestionsQuery.isLoading && (
+          <FriendPlaceholder friendPage={true} />
+          )}
+        {value === 2 && !suggestionsQuery.isLoading && (
           <div className="friend-section">
             <div
               className="scroll"
