@@ -29,13 +29,6 @@
   .row {
     flex-direction: row;
   }
-
-  @media screen and (max-width: 600px) {
-    .friend-section {
-      height: 30%;
-    }
-  }
-
 }
 
 .show {
@@ -49,7 +42,7 @@
 }
 
 @media screen and (max-width: 1050px) {
-  .show {
+  .show-mobile {
     display: flex !important;
   }
   .friend-container {
@@ -59,7 +52,7 @@
     align-items: center;
     justify-content: flex-start;
     height: 100vh;
-    padding-top: 6rem;
+    padding-top: 4rem;
 
     .friend-section {
       width: 100vw;

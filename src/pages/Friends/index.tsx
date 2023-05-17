@@ -19,6 +19,8 @@ import {
   usePendingQuery,
   useSuggestionQuery,
 } from "../../components/hooks/useFriendQuery";
+import RefreshIcon from "../../components/MessageSection/Helpers/RefreshIcon";
+import "../../components/MessageSection/style/style.scss";
 import "./style/style.scss";
 import React from "react";
 
@@ -285,20 +287,23 @@ const Friends = ({ currentUser }) => {
     if (
       friendsScroll.current?.clientHeight ===
         friendsScroll.current?.scrollHeight &&
-      friendQuery.hasNextPage && friendsScroll.current?.clientHeight
+      friendQuery.hasNextPage &&
+      friendsScroll.current?.clientHeight
     )
       friendQuery.fetchNextPage();
     if (
       pendingScroll.current?.clientHeight ===
         pendingScroll.current?.scrollHeight &&
-      pendingQuery.hasNextPage && pendingScroll.current?.clientHeight
+      pendingQuery.hasNextPage &&
+      pendingScroll.current?.clientHeight
     )
       pendingQuery.fetchNextPage();
-      console.log(suggestionsScroll.current?.clientHeight)
+    console.log(suggestionsScroll.current?.clientHeight);
     if (
       suggestionsScroll.current?.clientHeight ===
         suggestionsScroll.current?.scrollHeight &&
-      suggestionsQuery.hasNextPage && suggestionsScroll.current?.clientHeight
+      suggestionsQuery.hasNextPage &&
+      suggestionsScroll.current?.clientHeight
     )
       suggestionsQuery.fetchNextPage();
   }, [friendQuery, pendingQuery, suggestionsQuery]);
@@ -345,79 +350,74 @@ const Friends = ({ currentUser }) => {
   return (
     <>
       <div className="friend-container hide">
-      <div className="friend-section">
-        <Typography variant="h4" component="h1" mb={2}>
-          Friends
-        </Typography>
-        {friendQuery.isLoading ? (
-          <FriendPlaceholder friendPage={true} />
+        <div className="friend-section">
+          <Typography variant="h4" component="h1" mb={2}>
+            Friends
+          </Typography>
+          {friendQuery.isLoading ? (
+            <FriendPlaceholder friendPage={true} />
           ) : (
             <div
-            className="scroll"
-            ref={friendsScroll}
-            onScroll={handleFriendScroll}
+              className="scroll"
+              ref={friendsScroll}
+              onScroll={handleFriendScroll}
             >
-            <MapFriends
-              friendQuery={friendQuery}
-              handleConfirm={handleConfirm}
+              <MapFriends
+                friendQuery={friendQuery}
+                handleConfirm={handleConfirm}
               />
-          </div>
-        )}
-      </div>
-      <div className="friend-section">
-        <Typography
-          variant="h4"
-          component="h1"
-          mb={2}
-          sx={{ alignSelf: "center" }}
+              {friendQuery.isFetchingNextPage && <RefreshIcon />}
+            </div>
+          )}
+        </div>
+        <div className="friend-section">
+          <Typography
+            variant="h4"
+            component="h1"
+            mb={2}
+            sx={{ alignSelf: "center" }}
           >
-          Pending Requests
-        </Typography>
-        {pendingQuery.isLoading ? (
-          <FriendPlaceholder friendPage={true} />
+            Pending Requests
+          </Typography>
+          {pendingQuery.isLoading ? (
+            <FriendPlaceholder friendPage={true} />
           ) : (
             <div
-            className="scroll"
-            ref={pendingScroll}
-            onScroll={handlePendingScroll}
+              className="scroll"
+              ref={pendingScroll}
+              onScroll={handlePendingScroll}
             >
-            <FriendsPending
-              pendingQuery={pendingQuery}
-              acceptQuery={acceptQuery}
-              declineQuery={declineQuery}
+              <FriendsPending
+                pendingQuery={pendingQuery}
+                acceptQuery={acceptQuery}
+                declineQuery={declineQuery}
               />
-          </div>
-        )}
-      </div>
-      <div className="friend-section">
-        <Typography variant="h4" component="h1" mb={2}>
-          Suggestions
-        </Typography>
-        {suggestionsQuery.isLoading ? (
-          <FriendPlaceholder friendPage={true} />
+              {pendingQuery.isFetchingNextPage && <RefreshIcon />}
+            </div>
+          )}
+        </div>
+        <div className="friend-section">
+          <Typography variant="h4" component="h1" mb={2}>
+            Suggestions
+          </Typography>
+          {suggestionsQuery.isLoading ? (
+            <FriendPlaceholder friendPage={true} />
           ) : (
             <div
-            className="scroll"
-            ref={suggestionsScroll}
-            onScroll={handleSuggestionsScroll}
+              className="scroll"
+              ref={suggestionsScroll}
+              onScroll={handleSuggestionsScroll}
             >
-            <FriendSuggestions
-              suggestionsQuery={suggestionsQuery}
-              sendRequestQuery={sendRequestQuery}
+              <FriendSuggestions
+                suggestionsQuery={suggestionsQuery}
+                sendRequestQuery={sendRequestQuery}
               />
-          </div>
-        )}
+              {suggestionsQuery.isFetchingNextPage && <RefreshIcon />}
+            </div>
+          )}
+        </div>
       </div>
-      <DeleteFriend
-        handleDelete={handleDelete}
-        setOpen={setOpen}
-        open={open}
-        content={
-          "This will remove this friend are you sure you want to continue?"
-        }
-        />
-    </div>
-      <div className="friend-container !flex-col !content-normal justify-normal">
+      <div className="friend-container show-mobile !flex-col !content-normal justify-normal">
         <div>
           <Tabs value={value} onChange={handleTabChange} centered>
             <Tab label="Friends" />
@@ -427,7 +427,7 @@ const Friends = ({ currentUser }) => {
         </div>
         {value === 0 && friendQuery.isLoading && (
           <FriendPlaceholder friendPage={true} />
-          )} 
+        )}
         {value === 0 && !friendQuery.isLoading && (
           <div className="friend-section">
             <div
@@ -439,13 +439,13 @@ const Friends = ({ currentUser }) => {
                 friendQuery={friendQuery}
                 handleConfirm={handleConfirm}
               />
+              {friendQuery.isFetchingNextPage && <RefreshIcon />}
             </div>
           </div>
         )}
         {value === 1 && pendingQuery.isLoading && (
           <FriendPlaceholder friendPage={true} />
-          )
-        } 
+        )}
         {value === 1 && !pendingQuery.isLoading && (
           <div className="friend-section">
             <div
@@ -458,12 +458,13 @@ const Friends = ({ currentUser }) => {
                 acceptQuery={acceptQuery}
                 declineQuery={declineQuery}
               />
+              {pendingQuery.isFetchingNextPage && <RefreshIcon />}
             </div>
           </div>
         )}
         {value === 2 && suggestionsQuery.isLoading && (
           <FriendPlaceholder friendPage={true} />
-          )}
+        )}
         {value === 2 && !suggestionsQuery.isLoading && (
           <div className="friend-section">
             <div
@@ -475,71 +476,8 @@ const Friends = ({ currentUser }) => {
                 suggestionsQuery={suggestionsQuery}
                 sendRequestQuery={sendRequestQuery}
               />
+              {suggestionsQuery.isFetchingNextPage && <RefreshIcon />}
             </div>
-          </div>
-        )}
-      </div>
-      {/* <div className="friend-container show">
-      <div className="friend-section">
-        <Typography variant="h4" component="h1" mb={2}>
-          Friends
-        </Typography>
-        {friendQuery.isLoading ? (
-          <FriendPlaceholder friendPage={true} />
-        ) : (
-          <div
-            className="scroll"
-            ref={friendsScroll}
-            onScroll={handleFriendScroll}
-          >
-            <MapFriends
-              friendQuery={friendQuery}
-              handleConfirm={handleConfirm}
-            />
-          </div>
-        )}
-      </div>
-      <div className="friend-section">
-        <Typography
-          variant="h4"
-          component="h1"
-          mb={2}
-          sx={{ alignSelf: "center" }}
-        >
-          Pending Requests
-        </Typography>
-        {pendingQuery.isLoading ? (
-          <FriendPlaceholder friendPage={true} />
-        ) : (
-          <div
-            className="scroll"
-            ref={pendingScroll}
-            onScroll={handlePendingScroll}
-          >
-            <FriendsPending
-              pendingQuery={pendingQuery}
-              acceptQuery={acceptQuery}
-              declineQuery={declineQuery}
-            />
-          </div>
-        )}
-      </div>
-      <div className="friend-section">
-        <Typography variant="h4" component="h1" mb={2}>
-          Suggestions
-        </Typography>
-        {suggestionsQuery.isLoading ? (
-          <FriendPlaceholder friendPage={true} />
-        ) : (
-          <div
-            className="scroll"
-            ref={suggestionsScroll}
-            onScroll={handleSuggestionsScroll}
-          >
-            <FriendSuggestions
-              suggestionsQuery={suggestionsQuery}
-              sendRequestQuery={sendRequestQuery}
-            />
           </div>
         )}
       </div>
@@ -551,7 +489,6 @@ const Friends = ({ currentUser }) => {
           "This will remove this friend are you sure you want to continue?"
         }
       />
-    </div> */}
     </>
   );
 };

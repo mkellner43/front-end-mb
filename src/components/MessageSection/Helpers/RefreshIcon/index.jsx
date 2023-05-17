@@ -1,15 +1,16 @@
 import { motion } from "framer-motion";
+import '../../style/style.scss';
 
 const RefreshIcon = () => (
   <motion.div
     layout
     key="animation"
-    style={{ width: "100%", display: "flex", justifyContent: "center" }}
+    className="loader"
   >
-    <div className="loader-container">
-      <span className="dot1 loader" />
-      <span className="dot2 loader" />
-      <span className="dot3 loader" />
+    <div className="dot-container">
+      <span className="dot1" />
+      <span className="dot2" />
+      <span className="dot3" />
     </div>
   </motion.div>
 );
