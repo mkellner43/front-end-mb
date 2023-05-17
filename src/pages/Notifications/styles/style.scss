@@ -5,7 +5,7 @@
   width: 100%;
   @include center;
   justify-content: flex-start;
-  height: 80vh;
+  height: 100vh;
   padding-top: 6rem;
 
   .notification-buttons {
@@ -18,10 +18,11 @@
   .notification-section {
     @include center;
     justify-content: flex-start;
-    height: 80%;
+    height: 100%;
     overflow: scroll;
     width: 30%;
     min-width: 300px;
     max-width: 450px;
+    padding: 0 1rem;
   }
 }
