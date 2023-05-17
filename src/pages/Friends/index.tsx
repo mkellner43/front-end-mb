@@ -4,7 +4,7 @@ import {
   acceptFriend,
   declineFriend,
 } from "../../api/friends";
-import { Typography } from "@mui/material";
+import { Typography, Tabs, Tab } from "@mui/material";
 import { useSocket } from "../../context/SocketProvider";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import DeleteFriend from "../../components/Modals/SimpleTextAnswer";
@@ -43,6 +43,7 @@ const Friends = ({ currentUser }) => {
   const friendsScroll: any = useRef(null);
   const pendingScroll: any = useRef(null);
   const suggestionsScroll: any = useRef(null);
+  const [value, setNewValue] = useState(0);
 
   const declineQuery = useMutation({
     mutationFn: ({ request_id }: updateVariables) => declineFriend(request_id),
@@ -284,21 +285,20 @@ const Friends = ({ currentUser }) => {
     if (
       friendsScroll.current?.clientHeight ===
         friendsScroll.current?.scrollHeight &&
-      friendQuery.hasNextPage
+      friendQuery.hasNextPage && friendsScroll.current?.clientHeight
     )
       friendQuery.fetchNextPage();
-
     if (
       pendingScroll.current?.clientHeight ===
         pendingScroll.current?.scrollHeight &&
-      pendingQuery.hasNextPage
+      pendingQuery.hasNextPage && pendingScroll.current?.clientHeight
     )
       pendingQuery.fetchNextPage();
-
+      console.log(suggestionsScroll.current?.clientHeight)
     if (
       suggestionsScroll.current?.clientHeight ===
         suggestionsScroll.current?.scrollHeight &&
-      suggestionsQuery.hasNextPage
+      suggestionsQuery.hasNextPage && suggestionsScroll.current?.clientHeight
     )
       suggestionsQuery.fetchNextPage();
   }, [friendQuery, pendingQuery, suggestionsQuery]);
@@ -339,8 +339,137 @@ const Friends = ({ currentUser }) => {
     setConfirmDelete(null);
   };
 
+  const handleTabChange = (e, newValue) => {
+    setNewValue(newValue);
+  };
   return (
-    <div className="friend-container">
+    <>
+      <div className="friend-container hide">
+      <div className="friend-section">
+        <Typography variant="h4" component="h1" mb={2}>
+          Friends
+        </Typography>
+        {friendQuery.isLoading ? (
+          <FriendPlaceholder friendPage={true} />
+          ) : (
+            <div
+            className="scroll"
+            ref={friendsScroll}
+            onScroll={handleFriendScroll}
+            >
+            <MapFriends
+              friendQuery={friendQuery}
+              handleConfirm={handleConfirm}
+              />
+          </div>
+        )}
+      </div>
+      <div className="friend-section">
+        <Typography
+          variant="h4"
+          component="h1"
+          mb={2}
+          sx={{ alignSelf: "center" }}
+          >
+          Pending Requests
+        </Typography>
+        {pendingQuery.isLoading ? (
+          <FriendPlaceholder friendPage={true} />
+          ) : (
+            <div
+            className="scroll"
+            ref={pendingScroll}
+            onScroll={handlePendingScroll}
+            >
+            <FriendsPending
+              pendingQuery={pendingQuery}
+              acceptQuery={acceptQuery}
+              declineQuery={declineQuery}
+              />
+          </div>
+        )}
+      </div>
+      <div className="friend-section">
+        <Typography variant="h4" component="h1" mb={2}>
+          Suggestions
+        </Typography>
+        {suggestionsQuery.isLoading ? (
+          <FriendPlaceholder friendPage={true} />
+          ) : (
+            <div
+            className="scroll"
+            ref={suggestionsScroll}
+            onScroll={handleSuggestionsScroll}
+            >
+            <FriendSuggestions
+              suggestionsQuery={suggestionsQuery}
+              sendRequestQuery={sendRequestQuery}
+              />
+          </div>
+        )}
+      </div>
+      <DeleteFriend
+        handleDelete={handleDelete}
+        setOpen={setOpen}
+        open={open}
+        content={
+          "This will remove this friend are you sure you want to continue?"
+        }
+        />
+    </div>
+      <div className="friend-container !flex-col !content-normal justify-normal">
+        <div>
+          <Tabs value={value} onChange={handleTabChange} centered>
+            <Tab label="Friends" />
+            <Tab label="Pending" />
+            <Tab label="Suggestions" />
+          </Tabs>
+        </div>
+        {value === 0 && (
+          <div className="friend-section">
+            <div
+              className="scroll"
+              ref={friendsScroll}
+              onScroll={handleFriendScroll}
+            >
+              <MapFriends
+                friendQuery={friendQuery}
+                handleConfirm={handleConfirm}
+              />
+            </div>
+          </div>
+        )}
+        {value === 1 && (
+          <div className="friend-section">
+            <div
+              className="scroll"
+              ref={pendingScroll}
+              onScroll={handlePendingScroll}
+            >
+              <FriendsPending
+                pendingQuery={pendingQuery}
+                acceptQuery={acceptQuery}
+                declineQuery={declineQuery}
+              />
+            </div>
+          </div>
+        )}
+        {value === 2 && (
+          <div className="friend-section">
+            <div
+              className="scroll"
+              ref={suggestionsScroll}
+              onScroll={handleSuggestionsScroll}
+            >
+              <FriendSuggestions
+                suggestionsQuery={suggestionsQuery}
+                sendRequestQuery={sendRequestQuery}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+      {/* <div className="friend-container show">
       <div className="friend-section">
         <Typography variant="h4" component="h1" mb={2}>
           Friends
@@ -412,7 +541,8 @@ const Friends = ({ currentUser }) => {
           "This will remove this friend are you sure you want to continue?"
         }
       />
-    </div>
+    </div> */}
+    </>
   );
 };
 
