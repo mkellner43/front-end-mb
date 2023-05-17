@@ -45,7 +45,6 @@ const Cards = ({ post, date, user, object, currentUser }) => {
   const deleteThisPost = useMutation({
     mutationFn: deletePost,
     onMutate: async (variables) => {
-      //adjust for this mutation this is for sending a post
       queryClient.cancelQueries(["posts"]);
       queryClient.cancelQueries(["profile", currentUser.id]);
       const oldPosts = queryClient.getQueryData(["posts"]);
@@ -92,7 +91,6 @@ const Cards = ({ post, date, user, object, currentUser }) => {
 
   const addComment = useMutation({
     mutationFn: postComment,
-    // () => console.log('commented'),
     onMutate: async (variables) => {
       await queryClient.cancelQueries([
         `post: ${variables.object._id}`,
@@ -370,7 +368,7 @@ const Cards = ({ post, date, user, object, currentUser }) => {
       {/* post content */}
       <div className="post-content">
         <div className="post-text">
-          <Typography variant="body1" fontWeight={200}>
+          <Typography variant="body1" fontWeight={200} className="">
             {post}
           </Typography>
         </div>

@@ -1,12 +1,8 @@
 import { motion } from "framer-motion";
-import '../../style/style.scss';
+import "../../style/style.scss";
 
-const RefreshIcon = () => (
-  <motion.div
-    layout
-    key="animation"
-    className="loader"
-  >
+const RefreshIcon = ({ classes = "" }) => (
+  <motion.div layout key="animation" className={`loader ${classes}`}>
     <div className="dot-container">
       <span className="dot1" />
       <span className="dot2" />

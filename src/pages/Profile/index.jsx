@@ -10,6 +10,7 @@ import NewAvatar from "../../components/Modals/NewAvatar";
 import { useParams } from "react-router-dom";
 import { useProfilePostsQuery } from "../../components/hooks/usePostsQuery";
 import "../../components/MessageSection/style/style.scss";
+import RefreshIcon from "../../components/MessageSection/Helpers/RefreshIcon";
 
 const Profile = () => {
   const { id } = useParams();
@@ -72,13 +73,7 @@ const Profile = () => {
             <PostCards posts={profilePosts} currentUser={currentUser} />
           )}
           {getProfileData.isFetchingNextPage && (
-            <div className="loader">
-              <div className="dot-container">
-                <span className="dot1" />
-                <span className="dot2" />
-                <span className="dot3" />
-              </div>
-            </div>
+            <RefreshIcon classes={"pt-4"} />
           )}
         </div>
       )}
