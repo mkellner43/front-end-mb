@@ -88,8 +88,8 @@ export default App;
 
 // learn how to store files on web server through URLs although s3 is probably a better solution
 
-// add fake data and filter what user can see by friends and set defaults
+// filter what user can see by friends and set defaults
 
 // add search bar to search posts / people based on filter
 
-// fix mobile auth issue, update chat page style for mobile - get creative
+// fix mobile auth issue **

@@ -34,7 +34,7 @@ const Cards = ({ post, date, user, object, currentUser }) => {
   const navigate = useNavigate();
   const UsFormatter = new Intl.DateTimeFormat("en-US");
   const [likes, setLikes] = useState(
-    object?.likes?.filter((like) => like._id === currentUser.id).length > 0
+    object?.likes?.filter((like) => like.user_id === currentUser.id).length > 0
   );
   const [isCommenting, setIsCommenting] = useState(false);
   const [comment, setComment] = useState();
