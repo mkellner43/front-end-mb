@@ -1,7 +1,7 @@
 import { Typography, TextField, Button, Snackbar, Alert } from "@mui/material";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../api/user";
+import { login, guestLogin } from "../../api/user";
 import { useMutation } from "@tanstack/react-query";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -30,8 +30,12 @@ interface State {
 }
 
 interface submitCredentials {
-  username: string,
-  password: string
+  username: string;
+  password: string;
+}
+
+interface guestCredentials {
+  isGuest: boolean;
 }
 
 const Login = () => {
@@ -50,8 +54,7 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const submitLogin = useMutation({
-    mutationFn: (credentials : submitCredentials) =>
-      login(credentials),
+    mutationFn: (credentials: submitCredentials) => login(credentials),
     onSuccess: (data) => {
       dispatch(setCurrentUser(data));
       dispatch(setToken(data.token));
@@ -64,14 +67,33 @@ const Login = () => {
     },
     retry: false,
     onSettled: () => {
-      navigate("/")
+      navigate("/");
     },
     onError: (err) => {
       dispatch(setMainError(err));
     },
   });
 
-  console.log(submitLogin.isLoading)
+  const submitGuestLogin = useMutation({
+    mutationFn: (credentials: guestCredentials) => guestLogin(credentials),
+    onSuccess: (data) => {
+      dispatch(setCurrentUser(data));
+      dispatch(setToken(data.token));
+      dispatch(updateUsername(""));
+      dispatch(updatePassword(""));
+      dispatch(setNotification(null));
+      dispatch(setUsernameError(null));
+      dispatch(setPasswordError(null));
+      dispatch(setMainError(null));
+    },
+    retry: false,
+    onSettled: () => {
+      navigate("/");
+    },
+    onError: (err) => {
+      dispatch(setMainError(err));
+    },
+  });
 
   const handleClose = () => {
     dispatch(setMainError(null));
@@ -91,95 +113,121 @@ const Login = () => {
       const credentials = {
         username: username,
         password: password,
-      }
+      };
       submitLogin.mutate(credentials);
     }
   };
+
+  const handleGuestLogin = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    document.cookie = "access_token= ; max-age=0";
+    const credentials = {
+      isGuest: true,
+    };
+    submitGuestLogin.mutate(credentials);
+  };
   return (
-    <form className="center">
-      <div className="page-width-form center">
-        <Typography
-          variant="h2"
-          component="h1"
-          textAlign="center"
-          sx={{ m: 4 }}
-        >
-          Log In
-        </Typography>
-        {mainError && (
-          <Snackbar
-            open={mainError ? true : false}
-            onClose={handleClose}
-            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+    <>
+      <form className="center">
+        <div className="page-width-form center">
+          <Typography
+            variant="h2"
+            component="h1"
+            textAlign="center"
+            sx={{ m: 4 }}
           >
-            <Alert severity="error" onClose={handleClose}>
-              {mainError}
-            </Alert>
-          </Snackbar>
-        )}
-        {userCreated && (
-          <Snackbar
-            open={userCreated ? true : false}
-            onClose={handleClose}
-            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            Log In
+          </Typography>
+          {mainError && (
+            <Snackbar
+              open={mainError ? true : false}
+              onClose={handleClose}
+              anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            >
+              <Alert severity="error" onClose={handleClose}>
+                {mainError}
+              </Alert>
+            </Snackbar>
+          )}
+          {userCreated && (
+            <Snackbar
+              open={userCreated ? true : false}
+              onClose={handleClose}
+              anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            >
+              <Alert severity="success" onClose={handleClose}>
+                {userCreated}
+              </Alert>
+            </Snackbar>
+          )}
+          <TextField
+            error={usernameError !== null}
+            helperText={usernameError}
+            fullWidth
+            value={username}
+            name="username"
+            onChange={(e) => dispatch(updateUsername(e.target.value))}
+            size="small"
+            label="Username"
+            type="text"
+            sx={{ m: 1 }}
+          />
+          <TextField
+            error={passwordError !== null}
+            helperText={passwordError}
+            fullWidth
+            value={password}
+            name="password"
+            onChange={(e) => dispatch(updatePassword(e.target.value))}
+            size="small"
+            label="Password"
+            type="password"
+            autoComplete="new-password"
+            sx={{ m: 1 }}
+          />
+          <Button
+            type="submit"
+            onClick={handleGuestLogin}
+            variant="contained"
+            fullWidth
+            sx={{ m: 1 }}
+            disabled={submitLogin.isLoading}
           >
-            <Alert severity="success" onClose={handleClose}>
-              {userCreated}
-            </Alert>
-          </Snackbar>
-        )}
-        <TextField
-          error={usernameError !== null}
-          helperText={usernameError}
-          fullWidth
-          value={username}
-          name="username"
-          onChange={(e) => dispatch(updateUsername(e.target.value))}
-          size="small"
-          label="Username"
-          type="text"
-          sx={{ m: 1 }}
-        />
-        <TextField
-          error={passwordError !== null}
-          helperText={passwordError}
-          fullWidth
-          value={password}
-          name="password"
-          onChange={(e) => dispatch(updatePassword(e.target.value))}
-          size="small"
-          label="Password"
-          type="password"
-          autoComplete="new-password"
-          sx={{ m: 1 }}
-        />
-        <Button
-          type="submit"
-          onClick={handleSubmit}
-          variant="contained"
-          fullWidth
-          sx={{ m: 1 }}
-          disabled={submitLogin.isLoading}
-        >
-          Sign In
-        </Button>
-        <Typography variant="body1" sx={{ m: 1 }}>
-          Don't have an account yet?
-        </Typography>
-        <Button
-          variant="outlined"
-          type="button"
-          onClick={() => navigate("/signup")}
-          disabled={submitLogin.isLoading}
-          sx={{ m: 1 }}
-        >
-          Sign up
-        </Button>
-      </div>
-        {submitLogin.isLoading && <div className="absolute flex center">
-          <CircularProgress color="primary"/>
-          </div>}
-    </form>
+            Sign In
+          </Button>
+          {submitLogin.isLoading && (
+            <div className="absolute flex center">
+              <CircularProgress color="primary" />
+            </div>
+          )}
+        </div>
+        <div>
+          <Typography variant="body1" sx={{ m: 1, textAlign: "center" }}>
+            Don't have an account yet?
+          </Typography>
+          <Button
+            variant="outlined"
+            color="primary"
+            type="button"
+            onClick={() => navigate("/signup")}
+            disabled={submitLogin.isLoading}
+            sx={{ m: 1 }}
+          >
+            Sign up
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            type="button"
+            onClick={handleGuestLogin}
+            sx={{ m: 1 }}
+          >
+            Sign in as Guest
+          </Button>
+        </div>
+      </form>
+      <div className="flex"></div>
+    </>
   );
 };
 

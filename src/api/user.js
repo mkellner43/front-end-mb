@@ -13,6 +13,17 @@ export const login = async (credentials) => {
   }
 };
 
+export const guestLogin = async (credentials) => {
+  try {
+    const { data } = await instance.post(`users/login/guest`, credentials);
+    sessionStorage.setItem("user", JSON.stringify(data))
+    return data;
+  } catch (error) {
+    if (error.response?.status === 401)
+      return Promise.reject("Invalid username or password.");
+    return Promise.reject(error.message);
+  }
+};
 
 export const createUser = async (user) => {
   try {
