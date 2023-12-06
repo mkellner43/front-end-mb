@@ -12,6 +12,7 @@ import {
   setMainError,
   setCurrentUser,
   setToken,
+  setAlert,
 } from "./features/loginSlice";
 import { setNotification } from "../Signup/features/signUpSlice";
 import React from "react";
@@ -23,6 +24,7 @@ interface State {
     usernameError: string;
     passwordError: string;
     mainError: string;
+    alert: string;
   };
   signup: {
     notification: string;
@@ -39,7 +41,6 @@ interface guestCredentials {
 }
 
 const Login = () => {
-  // need to fix login loading indication and disable button when authing
   const navigate = useNavigate();
   const username = useSelector((state: State) => state.login.username);
   const password = useSelector((state: State) => state.login.password);
@@ -51,6 +52,7 @@ const Login = () => {
   );
   const mainError = useSelector((state: State) => state.login.mainError);
   const userCreated = useSelector((state: State) => state.signup.notification);
+  const sleepAlert = useSelector((state: State) => state.login.alert);
   const dispatch = useDispatch();
 
   const submitLogin = useMutation({
@@ -64,12 +66,29 @@ const Login = () => {
       dispatch(setUsernameError(null));
       dispatch(setPasswordError(null));
       dispatch(setMainError(null));
+      dispatch(setAlert(null));
     },
     retry: false,
-    onSettled: () => {
+    onMutate: (variables) => {
+      const timeoutDuration = 3000;
+      const timeout = setTimeout(() => {
+        dispatch(
+          setAlert(
+            "This server is running on a free instance in the cloud that spins down if unused. It may take a few seconds for the first login. Thank you for your patience!"
+          )
+        );
+        login(variables);
+      }, timeoutDuration);
+
+      return { timeout };
+    },
+    onSettled: (_data, _error, _variables, context: any) => {
+      clearTimeout(context.timeout);
       navigate("/");
     },
-    onError: (err) => {
+    onError: (err, _variables, context) => {
+      clearTimeout(context.timeout);
+      dispatch(setAlert(null));
       dispatch(setMainError(err));
     },
   });
@@ -87,10 +106,25 @@ const Login = () => {
       dispatch(setMainError(null));
     },
     retry: false,
-    onSettled: () => {
+    onMutate: (variables) => {
+      const timeoutDuration = 3000;
+      const timeout = setTimeout(() => {
+        dispatch(
+          setAlert(
+            "This server is running on a free instance in the cloud that spins down if unused. It may take a few seconds for the first login. Thank you for your patience!"
+          )
+        );
+        login(variables);
+      }, timeoutDuration);
+
+      return { timeout };
+    },
+    onSettled: (_data, _error, _variables, context: any) => {
+      clearTimeout(context.timeout);
       navigate("/");
     },
-    onError: (err) => {
+    onError: (err, _variables, context) => {
+      clearTimeout(context.timeout);
       dispatch(setMainError(err));
     },
   });
@@ -98,6 +132,10 @@ const Login = () => {
   const handleClose = () => {
     dispatch(setMainError(null));
     dispatch(setNotification(null));
+  };
+
+  const removeAlert = () => {
+    dispatch(setAlert(null));
   };
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
@@ -127,107 +165,119 @@ const Login = () => {
     submitGuestLogin.mutate(credentials);
   };
   return (
-    <>
-      <form className="center">
-        <div className="page-width-form center">
-          <Typography
-            variant="h2"
-            component="h1"
-            textAlign="center"
-            sx={{ m: 4 }}
+    <form className="center">
+      <div className="page-width-form center">
+        <Typography
+          variant="h2"
+          component="h1"
+          textAlign="center"
+          sx={{ m: 4 }}
+        >
+          Log In
+        </Typography>
+        {mainError && (
+          <Snackbar
+            open={mainError ? true : false}
+            onClose={handleClose}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
           >
-            Log In
-          </Typography>
-          {mainError && (
-            <Snackbar
-              open={mainError ? true : false}
-              onClose={handleClose}
-              anchorOrigin={{ vertical: "top", horizontal: "center" }}
-            >
-              <Alert severity="error" onClose={handleClose}>
-                {mainError}
-              </Alert>
-            </Snackbar>
-          )}
-          {userCreated && (
-            <Snackbar
-              open={userCreated ? true : false}
-              onClose={handleClose}
-              anchorOrigin={{ vertical: "top", horizontal: "center" }}
-            >
-              <Alert severity="success" onClose={handleClose}>
-                {userCreated}
-              </Alert>
-            </Snackbar>
-          )}
-          <TextField
-            error={usernameError !== null}
-            helperText={usernameError}
-            fullWidth
-            value={username}
-            name="username"
-            onChange={(e) => dispatch(updateUsername(e.target.value))}
-            size="small"
-            label="Username"
-            type="text"
-            sx={{ m: 1 }}
-          />
-          <TextField
-            error={passwordError !== null}
-            helperText={passwordError}
-            fullWidth
-            value={password}
-            name="password"
-            onChange={(e) => dispatch(updatePassword(e.target.value))}
-            size="small"
-            label="Password"
-            type="password"
-            autoComplete="new-password"
-            sx={{ m: 1 }}
-          />
-          <Button
-            type="submit"
-            onClick={handleGuestLogin}
-            variant="contained"
-            fullWidth
-            sx={{ m: 1 }}
-            disabled={submitLogin.isLoading}
+            <Alert severity="error" onClose={handleClose}>
+              {mainError}
+            </Alert>
+          </Snackbar>
+        )}
+        {userCreated && (
+          <Snackbar
+            open={userCreated ? true : false}
+            onClose={handleClose}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
           >
-            Sign In
-          </Button>
-          {submitLogin.isLoading && (
-            <div className="absolute flex center">
-              <CircularProgress color="primary" />
-            </div>
-          )}
-        </div>
-        <div>
-          <Typography variant="body1" sx={{ m: 1, textAlign: "center" }}>
-            Don't have an account yet?
-          </Typography>
-          <Button
-            variant="outlined"
-            color="primary"
-            type="button"
-            onClick={() => navigate("/signup")}
-            disabled={submitLogin.isLoading}
-            sx={{ m: 1 }}
-          >
-            Sign up
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            type="button"
-            onClick={handleGuestLogin}
-            sx={{ m: 1 }}
-          >
-            Sign in as Guest
-          </Button>
-        </div>
-      </form>
-      <div className="flex"></div>
-    </>
+            <Alert severity="success" onClose={handleClose}>
+              {userCreated}
+            </Alert>
+          </Snackbar>
+        )}
+        <TextField
+          error={usernameError !== null}
+          helperText={usernameError}
+          fullWidth
+          value={username}
+          name="username"
+          onChange={(e) => dispatch(updateUsername(e.target.value))}
+          size="small"
+          label="Username"
+          type="text"
+          sx={{ m: 1 }}
+        />
+        <TextField
+          error={passwordError !== null}
+          helperText={passwordError}
+          fullWidth
+          value={password}
+          name="password"
+          onChange={(e) => dispatch(updatePassword(e.target.value))}
+          size="small"
+          label="Password"
+          type="password"
+          autoComplete="new-password"
+          sx={{ m: 1 }}
+        />
+        <Button
+          type="submit"
+          onClick={handleSubmit}
+          variant="contained"
+          fullWidth
+          sx={{ m: 1 }}
+          disabled={submitLogin.isLoading}
+        >
+          Sign In
+        </Button>
+        {submitLogin.isLoading && (
+          <div className="absolute flex center">
+            <CircularProgress color="primary" />
+          </div>
+        )}
+      </div>
+      <div>
+        <Typography variant="body1" sx={{ m: 1, textAlign: "center" }}>
+          Don't have an account yet?
+        </Typography>
+        <Button
+          variant="outlined"
+          color="primary"
+          type="button"
+          onClick={() => navigate("/signup")}
+          disabled={submitLogin.isLoading}
+          sx={{ m: 1 }}
+        >
+          Sign up
+        </Button>
+        <Button
+          variant="outlined"
+          color="primary"
+          type="button"
+          onClick={handleGuestLogin}
+          sx={{ m: 1 }}
+          disabled={submitLogin.isLoading}
+        >
+          Sign in as Guest
+        </Button>
+      </div>
+      <Snackbar
+        open={
+          (submitLogin.isLoading && sleepAlert) ||
+          (submitGuestLogin.isLoading && sleepAlert)
+            ? true
+            : false
+        }
+        onClose={removeAlert}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity="warning" onClose={removeAlert}>
+          {sleepAlert}
+        </Alert>
+      </Snackbar>
+    </form>
   );
 };
 

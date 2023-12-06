@@ -8,6 +8,7 @@ export const loginSlice = createSlice({
     usernameError: null,
     passwordError: null,
     mainError: null,
+    alert: null,
     token: JSON.parse(sessionStorage.getItem("user"))?.token,
     currentUser: JSON.parse(sessionStorage.getItem("user")),
   },
@@ -36,6 +37,9 @@ export const loginSlice = createSlice({
     updateCurrentUserAvatar: (state, action) => {
       state.currentUser = { ...state.currentUser, avatar: action.payload };
     },
+    setAlert: (state, action) => {
+      state.alert = action.payload;
+    },
   },
 });
 
@@ -47,6 +51,7 @@ export const {
   setMainError,
   setToken,
   setCurrentUser,
+  setAlert,
   logOut,
 } = loginSlice.actions;
 
